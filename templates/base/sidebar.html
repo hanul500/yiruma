@@ -1,0 +1,54 @@
+{%load static%}
+<!doctype html>
+<html lang="en">
+  <head>
+     <title>회비 기록부</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link rel="stylesheet" href="{%static 'css/style.css'%}">
+  </head>
+  <body>
+      <div class="wrapper d-flex align-items-stretch">
+         <nav id="sidebar" class="active">
+        <ul class="list-unstyled components mb-5">
+          <li>
+            <a href="/pay/"><span class="fa fa-exchange"></span>기록부</a>
+          </li>
+          <li class="active">
+            <a href="/student/"><span class="fa fa-user"></span>학생</a>
+          </li>
+          <li class="active">
+            <a href="/pay/statistic/"><span class="fa fa-money"></span>통계</a>
+          </li>
+        </ul>
+       </nav>
+        <!-- Page Content  -->
+      <div id="content" class="p-4 p-md-5">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="nav navbar-nav ml-auto">
+                
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+        <div class="main">
+        {%block content%}
+          {%endblock%}
+        </div>
+      </div>
+      </div>
+
+    <script src="{%static 'js/bootstrap.min.js'%}"></script>
+    <script src="{%static 'js/main.js'%}"></script>
+  </body>
+</html>

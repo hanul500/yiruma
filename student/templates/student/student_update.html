@@ -1,0 +1,87 @@
+{%load static%}
+{%load humanize%}
+<!DOCTYPE html>
+<html>
+<head>
+   <title>수정</title>
+    <link rel=stylesheet type="text/css" href="{%static 'student/student_update.css'%}">
+</head>
+
+<body>
+
+    <div class="main">
+        <button class="button2" type="button" 
+        onclick="window.open('', '_self', ''); window.close();" id="2">X</button>
+    <h2>학생 정보 수정</h2>
+   <form class="addclass"  method="POST">{% csrf_token %}
+            <div class="item">
+              <label>이름: </label>
+              <input type="text" name="stu_name" value="{{stu_obj.stu_name}}" placeholder="ex)김월산">
+            </div>
+            <br>
+            <div class="item">
+              <label>구분: </label>
+              <select name="stu_category">
+                <option value="{{stu_obj.stu_category}}">{{stu_obj.stu_category}}</option>
+                <option value="푸르넷">푸르넷</option>
+                <option value="이루마">이루마</option>
+              </select>
+            </div>
+
+            <div class="item">
+              <label>회원번호: </label>
+              <input type="text" name="stu_num" value="{{stu_obj.stu_num}}" placeholder="ex)548715-215584">
+            </div>
+            <br>
+            <div class="item">
+              <label>지도과목: </label>
+              <input type="text" name="stu_subj" value="{{stu_obj.stu_subj}}" placeholder="ex)초3 수학">
+            </div>
+            <br>
+            <div class="iteme">
+              <label>지도비용: </label>
+              <input class="asd" type="text" name="stu_money" value="{{stu_obj.stu_money|intcomma}}" onkeyup="inputNumberFormat(this)" placeholder="문자입력금지"><label>원</label>
+            </div>
+            <br>
+            <div class="item">
+              <label>카드: </label>
+              <input type="text" name="stu_cardbank" value="{{stu_obj.stu_cardbank}}" placeholder="ex)우리카드">
+            </div>
+            <br>
+            <div class="item">
+              <label>카드번호: </label>
+              <input type="text" name="stu_card" value="{{stu_obj.stu_card}}" placeholder="ex)5142 3512 8457 9658">
+            </div>
+            <br>
+            <div class="item">
+              <label>유효기한: </label>
+              <input type="text" name="stu_validdate" value="{{stu_obj.stu_validdate}}" placeholder="ex)05/24">
+            </div>
+        
+          <button type="submit" name="submit_update" class="button3">수정</button>
+    </div>
+         </form>
+
+
+        
+</body>
+</html>
+<script>
+ window.onunload = refreshParent;
+    function refreshParent() {
+        window.opener.location.reload();
+    }
+function inputNumberFormat(obj) {
+    obj.value = comma(uncomma(obj.value));
+}
+
+function comma(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function uncomma(str) {
+    str = String(str);
+    return str.replace(/[^\d]+/g, '');
+}
+</script>
