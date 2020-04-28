@@ -84,9 +84,9 @@ def stat_view(request):
 		y=y[:12]
 	for i in range(len(tlist)):
 		total.append((tlist[i]/max(tlist))*100)
-	month_count = len(Studentpay_monthly.objects.all())
+	month_count = len(Studentpay_monthly.objects.all().filter(pay_complete=True))
 	total_income = 0
-	for i in Studentpay_monthly.objects.all():
+	for i in Studentpay_monthly.objects.all().filter(pay_complete=True):
 		total_income += i.cal_total()
 
 	context = {'ziped':zip(tlist,total,y,m),'obj':obj,'month_count':month_count,'total_income':total_income}
