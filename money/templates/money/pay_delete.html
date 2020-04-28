@@ -1,0 +1,32 @@
+{%load static%}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>삭제</title>
+    <link rel=stylesheet type="text/css" href="{%static 'student/student_delete.css'%}">
+
+
+</head>
+
+<body>
+
+    <div class="main">
+        <button class="button2" type="button" 
+        onclick="window.open('', '_self', ''); window.close();" id="2">X</button>
+    <h2>삭제하시겠습니까?</h2>
+        <p>삭제되는 정보: {{pay_m_obj.pay_year}}년 {{pay_m_obj.pay_month}}월 {{ stu_obj.stu_name }}</p>
+<div class="btnparty">
+<form method="POST">{%csrf_token%}
+          <button type="submit" name='submit_delete' class="buttondelete">삭제</button>
+        <button class="button3" onclick="window.close();">취소</button>
+    </form>
+    </div>
+    </div>
+<script>
+ window.onunload = refreshParent;
+    function refreshParent() {
+        window.opener.location.reload();
+    }
+    </script>
+</body>
+</html>

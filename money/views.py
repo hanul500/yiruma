@@ -20,6 +20,11 @@ def monthlypay(request,y,m):
 	pre_m = (now_date+relativedelta(months=-1)).month
 	nxt_y = (now_date+relativedelta(months=1)).year
 	nxt_m = (now_date+relativedelta(months=1)).month
+	if m_obj != None:
+		stulist = m_obj.not_stu()
+	else:
+		stulist = None
+
 	if request.method == 'POST':
 		if 'submit_save' in request.POST:
 			pay_appnum_txt = request.POST.getlist('pay_appnum_txt[]')
@@ -55,9 +60,12 @@ def monthlypay(request,y,m):
 				new_pay.pay_teachpay = i.stu_money
 				new_pay.save()
 			return HttpResponseRedirect('.')
+		elif 'add_stu' in request.POST:
+			m_obj.add_pay(Studentinfo.objects.get(stu_id=request.POST.get('stu_add')))
+			return HttpResponseRedirect('.')
 
 
-	context = {'obj':obj,'m_obj':m_obj,'year':y, 'month':m,'pre_y':str(pre_y), 'pre_m':str(pre_m), 'nxt_y':str(nxt_y),'nxt_m':str(nxt_m)}
+	context = {'obj':obj,'stulist':stulist,'m_obj':m_obj,'year':y, 'month':m,'pre_y':str(pre_y), 'pre_m':str(pre_m), 'nxt_y':str(nxt_y),'nxt_m':str(nxt_m)}
 	return render(request, 'money/monthly.html', context)
 
 def stat_view(request):
@@ -76,6 +84,24 @@ def stat_view(request):
 		y=y[:12]
 	for i in range(len(tlist)):
 		total.append((tlist[i]/max(tlist))*100)
+	month_count = len(Studentpay_monthly.objects.all())
+	total_income = 0
+	for i in Studentpay_monthly.objects.all():
+		total_income += i.cal_total()
 
-	context = {'ziped':zip(tlist,total,y,m),'obj':obj}
+	context = {'ziped':zip(tlist,total,y,m),'obj':obj,'month_count':month_count,'total_income':total_income}
 	return render(request, 'money/statistic.html', context)
+
+def pay_delete(request,y,m,stu_id):
+	stu_obj = get_object_or_404(Studentinfo, stu_id = stu_id)
+	pay_obj, pay_m_obj = get_pays(y,m)
+	pay_obj = pay_obj.filter(pay_stu = stu_obj)
+	if request.method == 'POST':
+		if 'submit_delete' in request.POST:
+			pay_obj.delete()
+			pay_obj, pay_m_obj = get_pays(y,m)
+			if len(pay_obj) == 0:
+				pay_m_obj.delete()
+			return HttpResponse('<script type="text/javascript">window.close(); window.parent.location.href = "/";</script>')
+	context = {'stu_obj':stu_obj,'pay_m_obj':pay_m_obj}
+	return render(request, 'money/pay_delete.html', context)

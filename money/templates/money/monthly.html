@@ -35,7 +35,7 @@
   <div class="all">
     <br>
     <h5><a href="/pay/{{pre_y}}/{{pre_m}}/">이전</a>{{year}}년 {{month}}월<a href="/pay/{{nxt_y}}/{{nxt_m}}/">다음</a></h5>
-    {%if m_obj == None%}<button  type="submit" name="create_list">리스트 생성</button>{%else%}<button type="submit" name="submit_save">저장</button>   정산완료<input type="checkbox" value='1' {%if m_obj.pay_complete == True%}checked="checked"{%endif%} name="complete">{%endif%}
+    {%if m_obj == None%}<button  type="submit" name="create_list">리스트 생성</button>{%else%}<button type="submit" name="submit_save">저장</button>   정산완료<input type="checkbox" value='1' {%if m_obj.pay_complete == True%}checked="checked"{%endif%} name="complete"><a id="myBtn" class="add">학생 추가</a>{%endif%}
     {{form.errors}}
     <table id="example" class="display" cellspacing="0" width="100%">
       <colgroup>
@@ -91,7 +91,7 @@
       <tbody>
         {% for i in obj %}
         <tr>
-          <th><a target="popup" href="/student/{{i.pay_stu.stu_id}}/update/" onclick="window.open('/student/{{i.pay_stu.stu_id}}/update/','수정', 'width=700 height=700'); return false;">{{i.pay_stu.stu_name}}</a></th>
+          <th><a target="popup" href="/student/{{i.pay_stu.stu_id}}/update/" onclick="window.open('/student/{{i.pay_stu.stu_id}}/update/','수정', 'width=700 height=700'); return false;">{{i.pay_stu.stu_name}}</a>  <a target="popup" href="/pay/{{year}}/{{month}}/{{i.pay_stu.stu_id}}/" onclick="window.open('/pay/{{year}}/{{month}}/{{i.pay_stu.stu_id}}/','삭제', 'width=400 height=200'); return false;"><img src="/static/money/icon.png/" width="10" height="10"></a></th>
 
           <td>{{i.pay_stu.stu_category|default_if_none:''}}</td>
           <td>{{i.pay_stu.stu_num|default_if_none:''}}</td>
@@ -115,6 +115,30 @@
     </table>
   </div>
 </form>
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="testbox">
+        <form method='POST' action=".">{%csrf_token%}
+          <div class="banner">
+            <h1>새로운 학생 추가</h1>
+          </div>
+            <div class="item">
+              이름: 
+              <select name="stu_add">
+                <option></option>
+                {%for i in stulist%}
+                <option value="{{i.stu_id}}">{{i.stu_name}}</option>
+                {%endfor%}
+              </select>
+            </div>
+            <br><br>
+            <button type="submit" name="add_stu">학생 추가</button>
+        </form>
+      </div>
+    </div>
+  </div>
 <script type="text/javascript" src= "https://code.jquery.com/jquery-1.12.4.js"></script>
 <script type="text/javascript" src= "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -133,10 +157,87 @@
 <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 <script src="datatables.min.js"></script>
-
+<datalist id="datalistschool"> 
+  {%for i in sch_obj%}
+  <option value="{{i.sch_name}}">{{i.sch_name|default_if_none:""}}</option> 
+  {%endfor%}
+</datalist> 
 
 <script type="text/javascript">
+var tags = [  
+"서현중학교",
+"찬혁고등학교"
+]; 
 
+/*list of available options*/ 
+var n= tags.length; //length of datalist tags     
+     
+function ac(value) {
+  document.getElementById('datalist').innerHTML = ''; 
+  //setting datalist empty at the start of function 
+  //if we skip this step, same name will be repeated 
+  l=value.length; 
+  //input query length 
+  for (var i = 0; i<n; i++) { 
+    if(((tags[i].toLowerCase()).indexOf(value.toLowerCase()))>-1){
+      //comparing if input string is existing in tags[i] string
+      var node = document.createElement("option"); 
+      var val = document.createTextNode(tags[i]); 
+      node.appendChild(val); 
+      document.getElementById("datalist").appendChild(node); 
+    //creating and appending new elements in data list 
+    }
+  }
+}
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+};
+
+var modal2 = document.getElementById("myModal2");
+
+// Get the button that opens the modal
+var btn2 = document.getElementById("myBtn2");
+
+// Get the <span> element that closes the modal
+var span2 = document.getElementsByClassName("close")[1];
+
+// When the user clicks the button, open the modal 
+btn2.onclick = function() {
+  modal2.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span2.onclick = function() {
+  modal2.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal2) {
+    modal2.style.display = "none";
+  }
+};
 
 function inputNumberFormat(obj) {
     obj.value = comma(uncomma(obj.value));

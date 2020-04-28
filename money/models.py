@@ -29,7 +29,21 @@ class Studentpay_monthly(models.Model):
 			sum_pay += i.pay_txtpay
 			sum_pay += i.pay_teachpay
 		return sum_pay
+	def not_stu(self):
+		stu_obj = Studentinfo.objects.all()
+		not_stu_obj = []
+		for i in stu_obj:
+			if len(Studentpay.objects.all().filter(Q(pay_monthly=self)&Q(pay_stu=i)))==0:
+				not_stu_obj.append(i)
+		return not_stu_obj
 
+	def add_pay(self, stu_obj):
+		new_pay = Studentpay()
+		new_pay.pay_monthly = self
+		new_pay.pay_stu = stu_obj
+		new_pay.pay_teachpay = stu_obj.stu_money
+		new_pay.save()
+		return new_pay
 
 
 class Studentpay(models.Model):
@@ -50,3 +64,4 @@ def get_pays(y,m):
 		return None, None
 	else:
 		return Studentpay.objects.all().filter(pay_monthly=obj[0]) , obj[0]
+
