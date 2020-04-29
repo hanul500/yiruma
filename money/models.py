@@ -65,3 +65,10 @@ def get_pays(y,m):
 	else:
 		return Studentpay.objects.all().filter(pay_monthly=obj[0]) , obj[0]
 
+def get_pay_eng(y,m):
+	obj = Studentpay_monthly.objects.all().filter(Q(pay_year=y)&Q(pay_month=m))
+	if len(obj) == 0:
+		return None, None
+	else:
+		return Studentpay.objects.all().filter(Q(pay_monthly=obj[0])&Q(pay_stu__stu_subj__contains='영어')) , obj[0]
+

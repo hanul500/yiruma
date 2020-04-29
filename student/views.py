@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect,HttpResponseRed
 from django.db.models import Q
 import datetime
 from dateutil.relativedelta import *
+from money.models import *
 from .models import *
 
 
@@ -38,6 +39,10 @@ def student_update(request, stu_id):
 			stu_obj.stu_subj = request.POST.get('stu_subj')
 			stu_obj.stu_money = int(request.POST.get('stu_money').replace(',',''))
 			stu_obj.save()
+			pay_obj = Studentpay.objects.all().filter(Q(pay_stu=stu_obj)&Q(pay_monthly__pay_complete=False))
+			for i in pay_obj:
+				i.pay_teachpay = stu_obj.stu_money
+				i.save()
 			return HttpResponse('<script type="text/javascript">window.close(); window.parent.location.href = "/";</script>')
 	context = {'stu_obj':stu_obj}
 	return render(request, 'student/student_update.html', context)

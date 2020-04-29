@@ -35,7 +35,7 @@
   <div class="all">
     <br>
     <h5><a href="/pay/{{pre_y}}/{{pre_m}}/">이전</a>      {{year}}년 {{month}}월      <a href="/pay/{{nxt_y}}/{{nxt_m}}/">다음</a></h5>
-    {%if m_obj == None%}<button  type="submit" name="create_list">리스트 생성</button>{%else%}<button type="submit" name="submit_save">저장</button>   정산완료<input type="checkbox" value='1' {%if m_obj.pay_complete == True%}checked="checked"{%endif%} name="complete"><a id="myBtn" class="add">학생 추가</a>   <a href="eng/">영어만 보기</a>{%endif%}
+    {%if m_obj == None%}<button  type="submit" name="create_list">리스트 생성</button>{%else%}<button type="submit" name="submit_save">저장</button>   정산완료<input type="checkbox" value='1' {%if m_obj.pay_complete == True%}checked="checked"{%endif%} name="complete"><a id="myBtn" class="add">학생 추가</a>   <a href="../">전체 보기</a>{%endif%}
     {{form.errors}}
     <table id="example" class="display" cellspacing="0" width="100%">
       <colgroup>
