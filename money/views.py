@@ -77,6 +77,7 @@ def monthlypay_eng(request,y,m):
 	nxt_m = (now_date+relativedelta(months=1)).month
 	if m_obj != None:
 		stulist = m_obj.not_stu()
+		sum_pay,sum_teach,sum_txt = m_obj.cal_eng()
 	else:
 		stulist = None
 
@@ -120,7 +121,7 @@ def monthlypay_eng(request,y,m):
 			return HttpResponseRedirect('.')
 
 
-	context = {'obj':obj,'stulist':stulist,'m_obj':m_obj,'year':y, 'month':m,'pre_y':str(pre_y), 'pre_m':str(pre_m), 'nxt_y':str(nxt_y),'nxt_m':str(nxt_m)}
+	context = {'obj':obj,'stulist':stulist,'m_obj':m_obj,'year':y, 'month':m,'pre_y':str(pre_y), 'pre_m':str(pre_m), 'nxt_y':str(nxt_y),'nxt_m':str(nxt_m),'sum_pay':sum_pay,'sum_txt':sum_txt,'sum_teach':sum_teach}
 	return render(request, 'money/monthly_eng.html', context)
 
 def stat_view(request):

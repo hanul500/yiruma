@@ -29,6 +29,17 @@ class Studentpay_monthly(models.Model):
 			sum_pay += i.pay_txtpay
 			sum_pay += i.pay_teachpay
 		return sum_pay
+	def cal_eng(self):
+		sum_pay = 0
+		sum_teach = 0
+		sum_txt = 0
+		obj = Studentpay.objects.all().filter(Q(pay_monthly=self)&Q(pay_stu__stu_subj__contains='영어'))
+		for i in obj:
+			sum_pay += i.pay_txtpay
+			sum_pay += i.pay_teachpay
+			sum_txt += i.pay_txtpay
+			sum_teach += i.pay_teachpay
+		return sum_pay, sum_teach, sum_txt
 	def not_stu(self):
 		stu_obj = Studentinfo.objects.all()
 		not_stu_obj = []
